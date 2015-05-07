@@ -16,15 +16,6 @@
 package org.codehaus.groovy.grails.web.servlet;
 
 import groovy.lang.GroovyObject;
-
-import java.io.Writer;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.grails.commons.GrailsApplication;
@@ -36,12 +27,20 @@ import org.codehaus.groovy.grails.support.ResourceAwareTemplateEngine;
 import org.codehaus.groovy.grails.web.metaclass.ControllerDynamicMethods;
 import org.codehaus.groovy.grails.web.pages.DefaultGroovyPagesUriService;
 import org.codehaus.groovy.grails.web.pages.GroovyPagesUriService;
+import org.codehaus.groovy.grails.web.util.WebUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.web.util.UrlPathHelper;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.Writer;
 
 /**
  * Holds knowledge about how to obtain certain attributes from either the ServletContext
@@ -139,7 +138,10 @@ public class DefaultGrailsApplicationAttributes implements GrailsApplicationAttr
 
             }
         }
-        return controllerName != null ? controllerName : "";
+        if (controllerName != null && !controllerName.isEmpty()) {
+            return controllerName;
+        }
+        return "";
     }
 
     /**
@@ -188,7 +190,11 @@ public class DefaultGrailsApplicationAttributes implements GrailsApplicationAttr
 
     public String getTemplateUri(CharSequence templateName, ServletRequest request) {
         Assert.notNull(templateName, "Argument [template] cannot be null");
-        return getGroovyPagesUriService().getTemplateURI(getControllerName(request), templateName.toString());
+        String controllerName = getControllerName(request);
+        if ((controllerName == null || controllerName.isEmpty()) && request instanceof HttpServletRequest) {
+            controllerName = WebUtils.resolveControllerNameFromServletPath((HttpServletRequest) request);
+        }
+        return getGroovyPagesUriService().getTemplateURI(controllerName, templateName.toString());
     }
 
     public String getViewUri(String viewName, HttpServletRequest request) {

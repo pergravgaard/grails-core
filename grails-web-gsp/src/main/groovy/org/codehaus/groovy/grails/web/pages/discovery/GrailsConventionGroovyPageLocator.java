@@ -16,9 +16,6 @@
 package org.codehaus.groovy.grails.web.pages.discovery;
 
 import grails.util.GrailsNameUtils;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler;
 import org.codehaus.groovy.grails.commons.GrailsApplication;
 import org.codehaus.groovy.grails.commons.GrailsControllerClass;
@@ -31,7 +28,10 @@ import org.codehaus.groovy.grails.web.pages.GroovyPageBinding;
 import org.codehaus.groovy.grails.web.pages.GroovyPagesUriService;
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest;
+import org.codehaus.groovy.grails.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Extended GroovyPageLocator that deals with the details of Grails' conventions
@@ -244,7 +244,11 @@ public class GrailsConventionGroovyPageLocator extends DefaultGroovyPageLocator 
         if (webRequest == null) {
             return findPageInBinding(pluginName, uriService.getAbsoluteTemplateURI(templateName), binding);
         }
-        return findPageInBinding(pluginName, uriService.getTemplateURI(webRequest.getControllerName(), templateName), binding);
+        String controllerName = webRequest.getControllerName();
+        if (controllerName == null || controllerName.isEmpty()) {
+            controllerName = WebUtils.resolveControllerNameFromServletPath(webRequest.getCurrentRequest());
+        }
+        return findPageInBinding(pluginName, uriService.getTemplateURI(controllerName, templateName), binding);
     }
 
     /**

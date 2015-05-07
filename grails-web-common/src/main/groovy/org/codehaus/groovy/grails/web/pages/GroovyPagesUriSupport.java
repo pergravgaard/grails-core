@@ -100,7 +100,7 @@ public class GroovyPagesUriSupport implements GroovyPagesUriService {
             pathToTemplate = templateName.substring(0, lastSlash + 1);
             templateName = templateName.substring(lastSlash + 1);
         }
-        if(controllerName != null) {
+        if (controllerName != null && !"".equals(controllerName)) {
             buf.append(SLASH)
                .append(controllerName);
         }

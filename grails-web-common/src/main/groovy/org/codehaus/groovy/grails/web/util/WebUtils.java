@@ -459,4 +459,12 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
         return result;
     }
 
+	public static String resolveControllerNameFromServletPath(HttpServletRequest request) {
+		String servletPath = request.getServletPath();
+		if (servletPath.indexOf('/') == 0) {
+			return servletPath.substring(1);
+		}
+		return servletPath;
+	}
+
 }

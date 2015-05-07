@@ -114,7 +114,7 @@ public class DefaultGroovyPagesUriService extends GroovyPagesUriSupport {
         String uri = templateURICache.get(key);
         if (uri == null) {
             uri = super.getTemplateURI(controllerName, templateName);
-            String prevuri=templateURICache.putIfAbsent(key, uri);
+            String prevuri = templateURICache.putIfAbsent(key, uri);
             if (prevuri != null) {
                 return prevuri;
             }
