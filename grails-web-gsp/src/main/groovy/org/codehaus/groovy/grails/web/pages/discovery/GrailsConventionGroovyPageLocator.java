@@ -225,6 +225,9 @@ public class GrailsConventionGroovyPageLocator extends DefaultGroovyPageLocator 
      */
     public GroovyPageScriptSource findTemplateInBinding(String templateName, GroovyPageBinding binding) {
         GrailsWebRequest webRequest = GrailsWebRequest.lookup();
+//		if (binding != null) {
+//			System.out.println("findTemplateInBinding (2 args): templateName: " + templateName + ", pluginName: " + (binding.getPagePlugin() != null ? binding.getPagePlugin().getName() : "no page plugin"));
+//		}
         if (webRequest == null) {
             return findPageInBinding(uriService.getAbsoluteTemplateURI(templateName), binding);
         }
@@ -248,7 +251,10 @@ public class GrailsConventionGroovyPageLocator extends DefaultGroovyPageLocator 
         if (controllerName == null || controllerName.isEmpty()) {
             controllerName = WebUtils.resolveControllerNameFromServletPath(webRequest.getCurrentRequest());
         }
-        return findPageInBinding(pluginName, uriService.getTemplateURI(controllerName, templateName), binding);
+		//System.out.println("findTemplateInBinding (3 args): templateName: " + templateName + ", pluginName: " + pluginName + " - " + (binding.getPagePlugin() != null ? binding.getPagePlugin().getName() : "page plugin null") + ", controller: " + controllerName);
+        GroovyPageScriptSource pageScriptSource = findPageInBinding(pluginName, uriService.getTemplateURI(controllerName, templateName), binding);
+//		System.out.println("scriptSource: " + pageScriptSource);
+		return pageScriptSource;
     }
 
     /**

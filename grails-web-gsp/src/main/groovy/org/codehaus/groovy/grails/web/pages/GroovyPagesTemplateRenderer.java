@@ -19,18 +19,6 @@ import grails.util.CacheEntry;
 import grails.util.Environment;
 import grails.util.GrailsNameUtils;
 import groovy.text.Template;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.codehaus.groovy.grails.commons.GrailsDomainClass;
 import org.codehaus.groovy.grails.commons.GrailsStringUtils;
 import org.codehaus.groovy.grails.io.support.GrailsResourceUtils;
@@ -49,6 +37,17 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Service that provides the actual implementation to RenderTagLib's render tag.
@@ -113,7 +112,7 @@ public class GroovyPagesTemplateRenderer implements InitializingBean {
     
     private Template findAndCacheTemplate(GroovyPageBinding pageScope, String templateName,
             String contextPath, String pluginName, final String uri) throws IOException {
-
+		//System.out.println("findAndCacheTemplate: templateName: " + templateName + ", pluginName: " + (pluginName == null ? "null" : "empty string"));
         String templatePath = GrailsStringUtils.isNotEmpty(contextPath) ? GrailsResourceUtils.appendPiecesForUri(contextPath, templateName) : templateName;
         final GroovyPageScriptSource scriptSource;
         if (pluginName == null) {
