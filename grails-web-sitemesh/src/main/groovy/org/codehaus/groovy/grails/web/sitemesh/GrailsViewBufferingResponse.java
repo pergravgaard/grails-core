@@ -29,7 +29,8 @@ public class GrailsViewBufferingResponse extends GrailsContentBufferingResponse{
     private static class SimpleWebAppContext extends SiteMeshWebAppContext {
         public SimpleWebAppContext(HttpServletRequest request, HttpServletResponse response) {
             super(request, response, request.getServletContext());
-        }
+			setContentType(response.getContentType() != null ? response.getContentType() : "text/html;charset=utf-8");
+		}
     }
     
     private static class SimpleHtmlOnlyContentProcessor implements ContentProcessor {

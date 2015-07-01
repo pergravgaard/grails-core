@@ -37,6 +37,8 @@ public class SitemeshLayoutView extends GrailsLayoutView {
     @Override
     protected GrailsContentBufferingResponse createContentBufferingResponse(Map<String, Object> model,
             GrailsWebRequest webRequest, HttpServletRequest request, HttpServletResponse response) {
-        return new GrailsContentBufferingResponse(response, contentProcessor, new SiteMeshWebAppContext(request, response, webRequest.getServletContext()));
+		SiteMeshWebAppContext siteMeshWebAppContext = new SiteMeshWebAppContext(request, response, webRequest.getServletContext());
+		siteMeshWebAppContext.setContentType(response.getContentType() != null ? response.getContentType() : "text/html;charset=utf-8");
+        return new GrailsContentBufferingResponse(response, contentProcessor, siteMeshWebAppContext);
     }
 }
